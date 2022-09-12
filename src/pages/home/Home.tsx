@@ -1,5 +1,7 @@
 import { Chart } from '../../components/chart/Chart'
 import { FeaturedInfo } from '../../components/featuredInfo/FeaturedInfo'
+import { WidgetLarge } from '../../components/widgetLarge/WidgetLarge';
+import { WidgetSmall } from '../../components/widgetSmall/WidgetSmall';
 import './home.css'
 
 const data = [
@@ -58,6 +60,10 @@ export const Home = () => {
     <div className='home'>
         <FeaturedInfo/>
         <Chart title='User Analytics' data={data} dataKey={'ActiveUser'} grid/>
+        <div className="homeWidgets">
+            <WidgetSmall/>
+            <WidgetLarge/>
+        </div>
     </div>
   )
 }
