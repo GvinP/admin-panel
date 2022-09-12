@@ -20,8 +20,8 @@ export const Sidebar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
-            <li className="sidebarListItem">
-              <NavLink to={'/'}>
+            <li>
+              <NavLink to={"/"} className={({isActive})=>"link sidebarListItem"+(isActive?" active":"")}>
                 <LineStyle className="sidebarIcon" />
                 Home
               </NavLink>
@@ -39,15 +39,17 @@ export const Sidebar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Quick Menu</h3>
           <ul className="sidebarList">
-            <li className="sidebarListItem">
-              <NavLink to={"/users"}>
+            <li>
+              <NavLink to={"/users"} className={({isActive})=>"link sidebarListItem"+(isActive?" active":"")}>
                 <PersonOutline className="sidebarIcon" />
                 Users
               </NavLink>
             </li>
-            <li className="sidebarListItem">
-              <Storefront className="sidebarIcon" />
-              Products
+            <li>
+              <NavLink to={"/products"} className={({isActive})=>"link sidebarListItem"+(isActive?" active":"")}>
+                <Storefront className="sidebarIcon" />
+                Products
+              </NavLink>
             </li>
             <li className="sidebarListItem">
               <AttachMoney className="sidebarIcon" />
