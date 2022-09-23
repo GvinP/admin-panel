@@ -14,8 +14,7 @@ type Order = {
 
 export const WidgetLarge = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  console.log(orders);
-
+ 
   useEffect(() => {
     const getOrders = async () => {
       const res = await userRequest.get<Order[]>("orders");
@@ -38,7 +37,7 @@ export const WidgetLarge = () => {
           <th className="widgetLargeTh">Status</th>
         </tr>
         {orders.map((order) => (
-          <tr className="widgetLargeTr">
+          <tr className="widgetLargeTr" key={order._id}>
             <td className="widgetLargeUser">
               <span className="widgetLargeUsername">{order.user}</span>
             </td>

@@ -15,9 +15,6 @@ function App() {
 
   const admin = JSON.parse(JSON.parse(localStorage.getItem('persist:root')||'{}').auth||"{}")?.currentUser?.isAdmin
 
-  console.log(admin);
-  
-
   return (
     <BrowserRouter>
       <Routes>

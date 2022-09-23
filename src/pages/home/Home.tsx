@@ -1,69 +1,37 @@
-import { Chart } from '../../components/chart/Chart'
-import { FeaturedInfo } from '../../components/featuredInfo/FeaturedInfo'
-import { WidgetLarge } from '../../components/widgetLarge/WidgetLarge';
-import { WidgetSmall } from '../../components/widgetSmall/WidgetSmall';
-import './home.css'
+import { useState, useEffect } from "react";
+import { userRequest } from "../../api/config";
+import { Chart } from "../../components/chart/Chart";
+import { FeaturedInfo } from "../../components/featuredInfo/FeaturedInfo";
+import { WidgetLarge } from "../../components/widgetLarge/WidgetLarge";
+import { WidgetSmall } from "../../components/widgetSmall/WidgetSmall";
+import "./home.css";
 
-const data = [
-    {
-      name: "Jan",
-      ActiveUser: 4000,
-    },
-    {
-      name: "Feb",
-      ActiveUser: 3000,
-    },
-    {
-      name: "Mar",
-      ActiveUser: 2000,
-    },
-    {
-      name: "Apr",
-      ActiveUser: 2780,
-    },
-    {
-      name: "May",
-      ActiveUser: 1890,
-    },
-    {
-      name: "Jun",
-      ActiveUser: 2390,
-    },
-    {
-      name: "Jul",
-      ActiveUser: 3490,
-    },
-    {
-      name: "Agu",
-      ActiveUser: 4000,
-    },
-    {
-      name: "Sep",
-      ActiveUser: 3000,
-    },
-    {
-      name: "Oct",
-      ActiveUser: 2000,
-    },
-    {
-      name: "Nov",
-      ActiveUser: 2780,
-    },
-    {
-      name: "Dec  ",
-      ActiveUser: 1890,
-    },
-  ];
+const Month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Agu", "Sep", "Oct", "Nov", "Dec"]
+
+type UsersStats = {
+  name: string,
+  ActiveUser: number,
+}
 
 export const Home = () => {
+  const [usersStats, setUsersStats] = useState<UsersStats[]>([]);
+
+  useEffect(() => {
+    const getUsersStats = async () => {
+      const res = await userRequest.get<{_id: number, total: number}[]>("user/stats");
+      res.data.map(item=> setUsersStats(prev=> [...prev, {name: Month[item._id-1], ActiveUser: item.total}]))
+    };
+    getUsersStats();
+  }, []);
+
   return (
-    <div className='home'>
-        <FeaturedInfo/>
-        <Chart title='User Analytics' data={data} dataKey={'ActiveUser'} grid/>
-        <div className="homeWidgets">
-            <WidgetSmall/>
-            <WidgetLarge/>
-        </div>
+    <div className="home">
+      <FeaturedInfo />
+      <Chart title="User Analytics" data={usersStats} dataKey={"ActiveUser"} grid />
+      <div className="homeWidgets">
+        <WidgetSmall />
+        <WidgetLarge />
+      </div>
     </div>
-  )
-}
+  );
+};
