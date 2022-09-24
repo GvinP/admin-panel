@@ -11,6 +11,9 @@ export const productAPI = {
   getAllProducts(): Promise<AxiosResponse<IProduct[]>> {
     return userRequest.get<IProduct[]>("products");
   },
+  deleteProduct(id: string) {
+    return userRequest.delete(`products/${id}`);
+  },
 };
 
 export interface AuthResponse {
