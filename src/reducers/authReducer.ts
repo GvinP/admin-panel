@@ -17,7 +17,7 @@ interface AuthData {
 
 const initialState: AuthState = {
   currentUser: {} as IUser,
-  token: '',
+  token: "",
   isLoading: false,
   error: false,
 };
@@ -25,14 +25,14 @@ const initialState: AuthState = {
 export const login = createAsyncThunk<AuthResponse | undefined, AuthData>(
   "auth/login",
   async ({ email, password, navigate }: AuthData, thunkAPI) => {
-    thunkAPI.dispatch(loginStart())
+    thunkAPI.dispatch(loginStart());
     try {
       const response = await authAPI.login(email, password);
-      thunkAPI.dispatch(loginSuccess())
-      navigate('/')
+      thunkAPI.dispatch(loginSuccess());
+      navigate("/");
       return response.data;
     } catch (error) {
-      thunkAPI.dispatch(loginFailure())
+      thunkAPI.dispatch(loginFailure());
       console.log(error);
     }
   }
@@ -55,10 +55,10 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
-      state.currentUser = action.payload?.user!
-      state.token = action.payload?.accessToken!
+      state.currentUser = action.payload?.user!;
+      state.token = action.payload?.accessToken!;
     });
-  }
+  },
 });
 
 export const { loginStart, loginFailure, loginSuccess } = authSlice.actions;

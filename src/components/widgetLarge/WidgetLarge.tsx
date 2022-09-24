@@ -1,23 +1,14 @@
 import { useEffect, useState } from "react";
+import { IOrder } from "../../api/api";
 import { userRequest } from "../../api/config";
 import "./widgetLarge.css";
 
-type Order = {
-  _id: string;
-  user: string;
-  products: any;
-  amount: number;
-  address: any;
-  status: "Pending" | "Approved" | "Decliend";
-  createdAt: string;
-};
-
 export const WidgetLarge = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
  
   useEffect(() => {
     const getOrders = async () => {
-      const res = await userRequest.get<Order[]>("orders");
+      const res = await userRequest.get<IOrder[]>("orders");
       setOrders(res.data);
     };
     getOrders();

@@ -2,23 +2,14 @@ import "./widgetSmall.css";
 import Visibility from "@material-ui/icons/Visibility";
 import { useEffect, useState } from "react";
 import { userRequest } from "../../api/config";
-
-type User = {
-  username: string;
-  email: string;
-  image: string;
-  isAdmin: true;
-  createdAt: string;
-  updatedAt: string;
-  _id: string;
-};
+import { IUser } from "../../api/api";
 
 export const WidgetSmall = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
  
   useEffect(() => {
     const getUsers = async () => {
-      const res = await userRequest.get<User[]>("user?new=true");
+      const res = await userRequest.get<IUser[]>("user?new=true");
       setUsers(res.data);
     };
     getUsers();

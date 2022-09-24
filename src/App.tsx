@@ -10,34 +10,35 @@ import { ProductList } from "./pages/productList/ProductList";
 import { Product } from "./pages/product/Product";
 import { NewProduct } from "./pages/newProduct/NewProduct";
 import { Login } from "./pages/login/Login";
+import { useAppSelector } from "./store/hooks";
 
 function App() {
-
-  const admin = JSON.parse(JSON.parse(localStorage.getItem('persist:root')||'{}').auth||"{}")?.currentUser?.isAdmin
-
+  const admin = useAppSelector((state) => state.auth?.currentUser?.isAdmin);
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/*"
           element={
-            admin ?
-            <>
-              <Topbar />
-              <div className="container">
-                <Sidebar />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/users" element={<UserList />} />
-                  <Route path="/user/:id" element={<User />} />
-                  <Route path="/newUser" element={<NewUser />} />
-                  <Route path="/products" element={<ProductList />} />
-                  <Route path="/product/:id" element={<Product />} />
-                  <Route path="/newproduct" element={<NewProduct />} />
-                </Routes>
-              </div>
-            </>
-            : <Navigate to={'/login'}/>
+            admin ? (
+              <>
+                <Topbar />
+                <div className="container">
+                  <Sidebar />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/users" element={<UserList />} />
+                    <Route path="/user/:id" element={<User />} />
+                    <Route path="/newUser" element={<NewUser />} />
+                    <Route path="/products" element={<ProductList />} />
+                    <Route path="/product/:id" element={<Product />} />
+                    <Route path="/newproduct" element={<NewProduct />} />
+                  </Routes>
+                </div>
+              </>
+            ) : (
+              <Navigate to={"/login"} />
+            )
           }
         />
         <Route path="/login" element={<Login />} />
