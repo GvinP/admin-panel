@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getAllProducts } from "../../reducers/productReducer";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 70 },
+  { field: "_id", headerName: "ID", width: 220 },
   {
     field: "product",
     headerName: "Product",
@@ -17,13 +17,12 @@ const columns: GridColDef[] = [
       return (
         <div className="productListItem">
           <img src={params.row.image} alt="" className="productListImage" />
-          {params.row.name}
+          {params.row.title}
         </div>
       );
     },
   },
-  { field: "stock", headerName: "Stock", width: 200 },
-  { field: "status", headerName: "Status", width: 120 },
+  { field: "inStock", headerName: "Stock", width: 200 },
   { field: "price", headerName: "Price", width: 160 },
   {
     field: "action",
