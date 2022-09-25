@@ -1,24 +1,31 @@
 import "./product.css";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Chart } from "../../components/chart/Chart";
 import Publish from "@material-ui/icons/Publish";
+import { useAppSelector } from "../../store/hooks";
+import { userRequest } from "../../api/config";
 
-const data = [
-  {
-    name: "Jun",
-    Sales: 3390,
-  },
-  {
-    name: "Jul",
-    Sales: 2490,
-  },
-  {
-    name: "Agu",
-    Sales: 4000,
-  },
-];
+const Month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Agu", "Sep", "Oct", "Nov", "Dec"]
+
+type ProductStats = {
+  name: string,
+  Sales: number,
+}
 
 export const Product = () => {
+  const { id } = useParams();
+  const product = useAppSelector(state=> state.product.products.find(product=> product._id === id))
+  const [productStats, setProductStats] = useState<ProductStats[]>([])
+
+  useEffect(() => {
+    const getProductStats = async () => {
+      const res = await userRequest.get<{_id: number, total: number}[]>(`orders/income?id=${id}`);
+      res.data.map(item=> setProductStats(prev=> [...prev, {name: Month[item._id-1], Sales: item.total}]));
+    };
+    getProductStats();
+  }, []);
+
   return (
     <div className="product">
       <div className="productTitleContainer">
@@ -30,7 +37,7 @@ export const Product = () => {
       <div className="productTop">
         <div className="productTopLeft">
           <Chart
-            data={data}
+            data={productStats}
             dataKey="Sales"
             title="Sales Perfomance"
             grid={false}
@@ -39,28 +46,31 @@ export const Product = () => {
         <div className="productTopRight">
           <div className="productInfoTop">
             <img
-              src="https://lp2.hm.com/hmgoepprod?set=source[/86/94/86943927061d67bed7d1550e3734bc33cde15c6b.jpg],origin[dam],category[ladies_trousers_highwaisted],type[DESCRIPTIVESTILLLIFE],res[y],hmver[2]&call=url[file:/product/main]"
+              src={product?.image}
               alt=""
               className="productInfoImage"
             />
-            <span className="productName">Wide-leg Twill Pants</span>
+            <span className="productName">{product?.title}</span>
           </div>
           <div className="productInfoBottom">
             <div className="productInfoItem">
               <span className="productInfoKey">id: </span>
-              <span className="productInfoValue">32</span>
+              <span className="productInfoValue">{product?._id}</span>
             </div>
             <div className="productInfoItem">
               <span className="productInfoKey">sales: </span>
               <span className="productInfoValue">2132</span>
             </div>
             <div className="productInfoItem">
-              <span className="productInfoKey">active: </span>
-              <span className="productInfoValue">yes</span>
-            </div>
-            <div className="productInfoItem">
               <span className="productInfoKey">in stock: </span>
-              <span className="productInfoValue">no</span>
+              <span className="productInfoValue">{product?.inStock
+              ? (
+                <div style={{width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'green'}}/>
+              ):(
+                <div style={{width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'red'}}/>
+              )
+              }
+              </span>
             </div>
           </div>
         </div>
@@ -69,22 +79,21 @@ export const Product = () => {
         <form className="productForm">
           <div className="productFormLeft">
             <label>Product Name</label>
-            <input type={"text"} placeholder={"Product Name"} />
+            <input type={"text"} placeholder={product?.title} />
+            <label>Product Description</label>
+            <input type={"text"} placeholder={product?.description} />
+            <label>Product Price</label>
+            <input type={"text"} placeholder={product?.price.toString()} />
             <label>In Stock</label>
             <select name="inStock" id="inStock">
-              <option value={"yes"}>Yes</option>
-              <option value={"no"}>No</option>
-            </select>
-            <label>Active</label>
-            <select name="active" id="active">
-              <option value={"yes"}>Yes</option>
-              <option value={"no"}>No</option>
+              <option value={"true"}>Yes</option>
+              <option value={"false"}>No</option>
             </select>
           </div>
           <div className="productFormRight">
             <div className="productUpload">
               <img
-                src="https://lp2.hm.com/hmgoepprod?set=source[/86/94/86943927061d67bed7d1550e3734bc33cde15c6b.jpg],origin[dam],category[ladies_trousers_highwaisted],type[DESCRIPTIVESTILLLIFE],res[y],hmver[2]&call=url[file:/product/main]"
+                src={product?.image}
                 alt=""
                 className="productUploadImage"
               />

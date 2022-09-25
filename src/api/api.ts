@@ -14,6 +14,12 @@ export const productAPI = {
   deleteProduct(id: string) {
     return userRequest.delete(`products/${id}`);
   },
+  updateProduct(id: string, propuct: IProduct) {
+    return userRequest.put<IProduct>(`products/${id}`, propuct);
+  },
+  addProduct(propuct: IProduct) {
+    return userRequest.post<IProduct>(`products`, propuct);
+  },
 };
 
 export interface AuthResponse {
@@ -42,14 +48,14 @@ export interface IOrder {
 }
 
 export interface IProduct {
-  _id: string;
+  _id?: string;
   title: string;
   description: string;
   image: string;
   categories: string[];
   size: string[];
   color: string[];
-  price: number;
+  price: string;
   inStock: boolean;
-  createdAt: string;
+  createdAt?: string;
 }

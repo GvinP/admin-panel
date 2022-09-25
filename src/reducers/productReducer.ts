@@ -43,6 +43,36 @@ export const deleteProduct = createAsyncThunk<string | undefined, string>(
   }
 );
 
+export const updateProduct = createAsyncThunk<IProduct | undefined, IProduct>(
+    "products/updateProduct",
+    async (product, thunkAPI) => {
+      thunkAPI.dispatch(fetchingStart());
+      try {
+        const res = await productAPI.updateProduct(product?._id!, product);
+        thunkAPI.dispatch(fetchingSuccess());
+        return res.data;
+      } catch (error) {
+        console.log(error);
+        thunkAPI.dispatch(fetchingFailure());
+      }
+    }
+  );
+
+  export const addProduct = createAsyncThunk<IProduct | undefined, IProduct>(
+    "products/addProduct",
+    async (product, thunkAPI) => {
+      thunkAPI.dispatch(fetchingStart());
+      try {
+        const res = await productAPI.addProduct(product);
+        thunkAPI.dispatch(fetchingSuccess());
+        return res.data;
+      } catch (error) {
+        console.log(error);
+        thunkAPI.dispatch(fetchingFailure());
+      }
+    }
+  );
+
 export const productSlice = createSlice({
   name: "product",
   initialState,
@@ -69,8 +99,14 @@ export const productSlice = createSlice({
         1
       );
     });
+    builder.addCase(updateProduct.fulfilled, (state, action) => {
+      state.products[state.products.findIndex((item) => item._id === action.payload?._id)] = action.payload!
+    });
+    builder.addCase(addProduct.fulfilled, (state, action) => {
+      state.products.push(action.payload!)
+    });
   },
-});
+}); 
 
 export const { fetchingStart, fetchingSuccess, fetchingFailure } =
   productSlice.actions;

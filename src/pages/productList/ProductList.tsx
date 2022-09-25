@@ -60,7 +60,7 @@ export const ProductList = () => {
     <div className="productList">
       <DataGrid
         rows={products}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row?._id || ""}
         columns={columns}
         pageSize={8}
         disableSelectionOnClick
